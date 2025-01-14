@@ -22,7 +22,7 @@ const Component = () => {
       return () => {
         window.removeEventListener('resize', handleResize);
       };
-    }, [count]); 
+    }, [count]);
 
 
 
