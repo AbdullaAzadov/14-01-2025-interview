@@ -11,12 +11,13 @@
 import { useState, useEffect } from 'react';
 
 const Component = () => {
-  const [count, setCount] = useState(0);
-  const [isGreaterThan5, setIsGreaterThan5] = useState(false);
+  const [count, setCount] = useState<number>(0);
+  const [isGreaterThan5, setIsGreaterThan5] = useState<boolean>(false);
 
   useEffect(() => {
     if (count > 5) {
       setIsGreaterThan5(true);
+      console.log('Счетчик больше 5')
     } else {
       setIsGreaterThan5(false);
     }
