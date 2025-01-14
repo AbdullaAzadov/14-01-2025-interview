@@ -25,7 +25,7 @@ const tasks : ITask[] = [
 ];
 
 // Напишите функцию, которая принимает массив задач и возвращает только выполненные задачи.
-function filterCompletedTasks(tasks :  ITask[]) {
+function filterCompletedTasks(tasks :  ITask[]) : ITask[] {
   return tasks.filter((task) => task.completed === true)
 }
 
