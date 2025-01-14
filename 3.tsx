@@ -1,15 +1,19 @@
+import React, { useState } from 'react';
+
 /* Задание 3
 Реализуйте компонент UserSearch, который позволяет искать пользователей по имени.
 Также необходимо типизировать объект User и компонент UserSearch.
 */
 
 interface IUser {
-  // Типизируйте объект User
+  id: number;
+  name: string;
+  age: number;
 }
 
 // Типизируйте компонент UserSearch
-const UserSearch = () => {
-  const users = [
+const UserSearch: React.FC = () => {
+  const users: IUser[] = [
     { id: 1, name: 'Иван', age: 25 },
     { id: 2, name: 'Мария', age: 30 },
     { id: 3, name: 'Петр', age: 28 },
@@ -17,16 +21,30 @@ const UserSearch = () => {
     { id: 5, name: 'Анна', age: 22 },
   ];
 
-  const [searchTerm, setSearchTerm] = useState</*типизируйте useState*/>('');
-  const filteredUsers = []; // Фильтруйте пользователей по имени
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const filteredUsers = users.filter((user) =>
+    user.name.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
 
   return (
-    <div>
-      <h1>Поиск пользователей</h1>
-      {/* Здесь напишите input для посика */}
-
-      <ul>{/* Выводите список отфильтрованных пользователей здесь */}</ul>
-    </div>
+    <>
+      <div>
+        <h1>Поиск пользователей</h1>
+        <input
+          type="text"
+          placeholder="Введите имя"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <ul>
+          {filteredUsers.map((user) => (
+            <li key={user.id}>
+              {user.name} ({user.age} лет)
+            </li>
+          ))}
+        </ul>
+      </div>
+    </>
   );
 };
 
