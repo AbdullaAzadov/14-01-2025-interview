@@ -20,7 +20,6 @@ function Pow(number, power) {
   for (let i = 0; i < power; i++) {
     res *= number;
   }
-
   return 42;
 }
 
