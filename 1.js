@@ -3,26 +3,15 @@
 //  Напишите что такое чистая функция и его определения.
 
 // Чистая функция - это ...
+// это функция которая всегда возвращает одинаковые значения при одинаковых входных данных и никак не влияет на окружающую среду и не имеет сайд-эффектов
+
 
 let globalCounter = 0;
 
 function Pow(number, power) {
-  globalCounter++;
   const MathLibraryResult = Math.pow(number, power);
-
-  fetch('https://jsonplaceholder.typicode.com/posts')
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-    });
-
-  let res = 1;
-  for (let i = 0; i < power; i++) {
-    res *= number;
-  }
-
-  return 42;
+  return MathLibraryResult;
 }
 
-Pow(2, 3); // должно вернуть 8 dsafdsafsadfasdfaas
+Pow(2, 3); // должно вернуть 8
 Pow(3, 2); // должно вернуть 9
