@@ -11,7 +11,7 @@ interface IUser {
 
 // Типизируйте компонент UserSearch
 const UserSearch = () => {
-  const users = [
+  const users: IUser[] = [
     { id: 1, name: 'Иван', age: 25 },
     { id: 2, name: 'Мария', age: 30 },
     { id: 3, name: 'Петр', age: 28 },
@@ -19,15 +19,27 @@ const UserSearch = () => {
     { id: 5, name: 'Анна', age: 22 },
   ];
 
-  const [searchTerm, setSearchTerm] = useState<IUser>('');
-  const filteredUsers = []; // Фильтруйте пользователей по имени
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const filteredUsers = users.filter((user) =>
+    user.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div>
       <h1>Поиск пользователей</h1>
-      {/* Здесь напишите input для посика */}
-       <input/>
-      <ul>{/* Выводите список отфильтрованных пользователей здесь */}</ul>
+      <input
+        type="text"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)} // Обновление строки поиска
+        placeholder="Введите имя пользователя"
+      />
+      <ul>
+        {filteredUsers.map((user) => (
+          <li key={user.id}>
+            {user.name} - {user.age} лет
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
