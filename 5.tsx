@@ -10,15 +10,51 @@ tablet - если ширина экрана меньше 1024px
 desktop - если ширина экрана больше 1024px
 
 
-Напишите объяснение к написанному коду.
-*/
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
-// TScreenType
+// Тип экрана
+type TScreenType = 'mobile' | 'tablet' | 'desktop';
 
-// getCurrentScreen - функция, которая возвращает строку с типом экрана
+// Функция, которая возвращает текущий тип экрана
+const getCurrentScreen = (): TScreenType => {
+  const width = window.innerWidth;
+  if (width < 768) return 'mobile';
+  if (width < 1024) return 'tablet';
+  return 'desktop';
+};
 
-// ScreenContext
+// Создание контекста
+const ScreenContext = createContext<TScreenType | null>(null);
 
-// ScreenContextProvider
+// Провайдер ScreenContext
+const ScreenContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [screenType, setScreenType] = useState<TScreenType>(getCurrentScreen());
 
-// useScreenType
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenType(getCurrentScreen());
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return <ScreenContext.Provider value={screenType}>{children}</ScreenContext.Provider>;
+};
+
+// Хук для получения типа экрана
+const useScreenType = (): TScreenType => {
+  const screenType = useContext(ScreenContext);
+  if (!screenType) {
+    throw new Error('useScreen must be used within a ScreenProvider');
+  }
+  return screenType;
+};
+
+export { ScreenContextProvide
+
+// TScreenType: Описывает возможные значения типа экрана: 'mobile', 'tablet', 'desktop'.
+// getCurrentScreen: Возвращает текущий тип экрана на основе ширины окна.
+// ScreenContext: Контекст, который предоставляет значение типа экрана.
+// ScreenContextProvider: Провайдер контекста, который обновляет значение типа экрана при изменении размера окна.
+// useScreenType: Хук для доступа к текущему типу экрана. Если вызов хука происходит вне провайдера, выбрасывается ошибка.
