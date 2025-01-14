@@ -13,12 +13,66 @@ desktop - если ширина экрана больше 1024px
 Напишите объяснение к написанному коду.
 */
 
-// TScreenType
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
 
-// getCurrentScreen - функция, которая возвращает строку с типом экрана
+// Тип экрана
+type TScreenType = "mobile" | "tablet" | "desktop";
 
-// ScreenContext
+const getCurrentScreen = (): TScreenType => {
+  const width = window.innerWidth;
+  // возращаем тип экрана в зависимости от количества пикселей на экране
+  if (width < 768) return "mobile";
+  if (width < 1024) return "tablet";
+  return "desktop";
+};
 
-// ScreenContextProvider
+// Создание контекста с типом экрана
+const ScreenContext = createContext<TScreenType | undefined>(undefined);
 
-// useScreenType
+// Провайдер контекста
+interface ScreenContextProviderProps {
+  children: ReactNode;
+}
+
+export const ScreenContextProvider: React.FC<ScreenContextProviderProps> = ({
+  children,
+}) => {
+  const [screenType, setScreenType] = useState<TScreenType>(getCurrentScreen());
+
+  // Обновляем тип экрана при изменении размера окна
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenType(getCurrentScreen());
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Очистка события при размонтировании компонента
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  return (
+    <ScreenContext.Provider value={screenType}>
+      {children}
+    </ScreenContext.Provider>
+  );
+};
+
+// Хук для использования контекста
+export const useScreenType = (): TScreenType => {
+  const context = useContext(ScreenContext);
+
+  if (context === undefined) {
+    throw new Error("useScreen must be used within a ScreenProvider");
+  }
+
+  return context;
+};
