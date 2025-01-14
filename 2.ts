@@ -33,8 +33,8 @@ const tasks: ITask[] = [
 	{ id: 10, title: 'Сходить на выставку', completed: true }
 ];
 // Напишите функцию, которая принимает массив задач и возвращает только выполненные задачи.
-function filterCompletedTasks() {
-	// Ваш код
+function filterCompletedTasks(tasks: ITask[]): ITask[] {
+	return tasks.filter((task) => task.completed);
 }
 
 const completedTasks = filterCompletedTasks(tasks);
