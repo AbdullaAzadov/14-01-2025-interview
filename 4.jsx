@@ -8,7 +8,7 @@
 - если значение счетчика больше 5, то при изменении размера окна в консоль выводится текст "Resize event detected"
 */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 const Component = () => {
   const [count, setCount] = useState(0);
@@ -22,14 +22,19 @@ const Component = () => {
     }
   }, [count]);
 
-  if (count > 5) {
-    useEffect(() => {
-      const handleResize = () => {
-        console.log('Resize event detected');
-      };
-      window.addEventListener('resize', handleResize);
-    }, []);
-  }
+  useEffect(() => {
+    const handleResize = () => {
+      if (count > 5) {
+        console.log("Resize event detected");
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <div>
