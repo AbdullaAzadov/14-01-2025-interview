@@ -1,24 +1,62 @@
-/* Задача 5
-Напишите контекст, и хук useScreenType, который будет возвращать текущий тип экрана. 
-Тип экрана должен быть строкой и принимать одно из следующих значений: 
-'mobile', 'tablet', 'desktop'.
-При этом, если контекст не был найден, хук должен бросать ошибку с текстом 'useScreen must be used within a ScreenProvider'. 
-Хук и контекст должны быть типизированы.
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
 
-mobile - если ширина экрана меньше 768px
-tablet - если ширина экрана меньше 1024px
-desktop - если ширина экрана больше 1024px
+// Тип для обозначения типов экрана
+type TScreenType = "mobile" | "tablet" | "desktop";
 
+// Функция, определяющая текущий тип экрана
+const getCurrentScreen = (): TScreenType => {
+  const width = window.innerWidth;
+  if (width < 768) return "mobile";
+  if (width < 1024) return "tablet";
+  return "desktop";
+};
 
-Напишите объяснение к написанному коду.
-*/
+// Создание контекста экрана
+const ScreenContext = createContext<TScreenType | undefined>(undefined);
 
-// TScreenType
+// Провайдер контекста экрана
+interface ScreenProviderProps {
+  children: ReactNode;
+}
 
-// getCurrentScreen - функция, которая возвращает строку с типом экрана
+export const ScreenContextProvider: React.FC<ScreenProviderProps> = ({
+  children,
+}) => {
+  const [screenType, setScreenType] = useState<TScreenType>(getCurrentScreen);
 
-// ScreenContext
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenType(getCurrentScreen());
+    };
 
-// ScreenContextProvider
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
-// useScreenType
+  return (
+    <ScreenContext.Provider value={screenType}>
+      {children}
+    </ScreenContext.Provider>
+  );
+};
+
+// Хук для получения типа экрана
+export const useScreenType = (): TScreenType => {
+  const context = useContext(ScreenContext);
+  if (context === undefined) {
+    throw new Error(
+      "useScreenType must be used within a ScreenContextProvider"
+    );
+  }
+  return context;
+};
+
+export default ScreenContextProvider;
