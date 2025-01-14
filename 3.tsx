@@ -3,13 +3,19 @@
 Также необходимо типизировать объект User и компонент UserSearch.
 */
 
+import React, { useState } from 'react';
+
+// Типизируем объект User
 interface IUser {
-  // Типизируйте объект User
+  id: number;
+  name: string;
+  age: number;
 }
 
-// Типизируйте компонент UserSearch
-const UserSearch = () => {
-  const users = [
+// Компонент UserSearch
+const UserSearch: React.FC = () => {
+  // Список пользователей
+  const users: IUser[] = [
     { id: 1, name: 'Иван', age: 25 },
     { id: 2, name: 'Мария', age: 30 },
     { id: 3, name: 'Петр', age: 28 },
@@ -17,15 +23,32 @@ const UserSearch = () => {
     { id: 5, name: 'Анна', age: 22 },
   ];
 
-  const [searchTerm, setSearchTerm] = useState</*типизируйте useState*/>('');
-  const filteredUsers = []; // Фильтруйте пользователей по имени
+  // Состояние строки поиска
+  const [searchTerm, setSearchTerm] = useState<string>('');
+
+  // Фильтрация пользователей по имени
+  const filteredUsers = users.filter((user) =>
+    user.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div>
       <h1>Поиск пользователей</h1>
-      {/* Здесь напишите input для посика */}
-
-      <ul>{/* Выводите список отфильтрованных пользователей здесь */}</ul>
+      {/* Поле ввода для поиска */}
+      <input
+        type="text"
+        placeholder="Введите имя пользователя"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+      <ul>
+        {/* Выводим список отфильтрованных пользователей */}
+        {filteredUsers.map((user) => (
+          <li key={user.id}>
+            {user.name} — {user.age} лет
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
