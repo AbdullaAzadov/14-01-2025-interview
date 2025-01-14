@@ -4,7 +4,9 @@
 */
 
 interface IUser {
-  // Типизируйте объект User
+  id: number;
+  name: string;
+  age: number;
 }
 
 // Типизируйте компонент UserSearch
@@ -17,16 +19,32 @@ const UserSearch = () => {
     { id: 5, name: 'Анна', age: 22 },
   ];
 
-  const [searchTerm, setSearchTerm] = useState</*типизируйте useState*/>('');
-  const filteredUsers = []; // Фильтруйте пользователей по имени
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const filteredUsers = users.filter(user =>
+      user.name.toLowerCase().includes(searchTerm.toLowerCase())
+  ); // Фильтруйте пользователей по имени
 
   return (
-    <div>
-      <h1>Поиск пользователей</h1>
-      {/* Здесь напишите input для посика */}
-
-      <ul>{/* Выводите список отфильтрованных пользователей здесь */}</ul>
-    </div>
+      <div>
+        <h1>Поиск пользователей</h1>
+        {/* Здесь напишите input для посика */}
+        <input
+            type="text"
+            placeholder="Введите имя"
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+        />
+        <ul>
+          {/* Выводите список отфильтрованных пользователей здесь */}
+          <ul>
+            {filteredUsers.map(user => (
+                <li key={user.id}>
+                  {user.name} (Возраст: {user.age})
+                </li>
+            ))}
+          </ul>
+        </ul>
+      </div>
   );
 };
 
