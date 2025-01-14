@@ -10,7 +10,7 @@ let globalCounter = 0;
 
 function Pow(number, power) {
   globalCounter++;
-  const MathLibraryResult = Math.pow(number, power);
+  // const MathLibraryResult = Math.pow(number, power);
 
   // fetch("https://jsonplaceholder.typicode.com/posts")
   //   .then((response) => response.json())
