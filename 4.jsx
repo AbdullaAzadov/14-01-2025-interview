@@ -7,29 +7,27 @@
 - если значение счетчика больше 5, то отображается текст "Счетчик больше 5"
 - если значение счетчика больше 5, то при изменении размера окна в консоль выводится текст "Resize event detected"
 */
-
-import { useState, useEffect } from 'react';
-
 const Component = () => {
   const [count, setCount] = useState(0);
   const [isGreaterThan5, setIsGreaterThan5] = useState(false);
 
   useEffect(() => {
-    if (count > 5) {
-      setIsGreaterThan5(true);
-    } else {
-      setIsGreaterThan5(false);
-    }
+    setIsGreaterThan5(count > 5);
   }, [count]);
 
-  if (count > 5) {
-    useEffect(() => {
-      const handleResize = () => {
+  useEffect(() => {
+    const handleResize = () => {
+      if (count > 5) {
         console.log('Resize event detected');
-      };
-      window.addEventListener('resize', handleResize);
-    }, []);
-  }
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [count]); 
 
   return (
     <div>
@@ -40,3 +38,5 @@ const Component = () => {
     </div>
   );
 };
+
+export default Component;
