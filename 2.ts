@@ -2,7 +2,10 @@
 // Типизируйте данные и функцию в этом коде.
 
 interface ITask {
-  // Типизируйте объект Task
+  id: number;
+  title: string;
+  completed: boolean;
+  priority?: 'high' | 'medium' | 'low';
 }
 
 // tasks - должен быть типизирован как массив объектов Task
@@ -22,6 +25,7 @@ const tasks = [
 // Напишите функцию, которая принимает массив задач и возвращает только выполненные задачи.
 function filterCompletedTasks() {
   // Ваш код
+  return tasks.filter(task => task.completed);
 }
 
 const completedTasks = filterCompletedTasks(tasks);
