@@ -5,10 +5,13 @@
 
 interface IUser {
   // Типизируйте объект User
+  id: number,
+  name: string,
+  age: number,
 }
 
 // Типизируйте компонент UserSearch
-const UserSearch = () => {
+const UserSearch = (name:string):IUser[] => {
   const users = [
     { id: 1, name: 'Иван', age: 25 },
     { id: 2, name: 'Мария', age: 30 },
@@ -17,15 +20,17 @@ const UserSearch = () => {
     { id: 5, name: 'Анна', age: 22 },
   ];
 
-  const [searchTerm, setSearchTerm] = useState</*типизируйте useState*/>('');
-  const filteredUsers = []; // Фильтруйте пользователей по имени
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const filteredUsers = UserSearch(searchTerm); // Фильтруйте пользователей по имени
 
   return (
     <div>
       <h1>Поиск пользователей</h1>
       {/* Здесь напишите input для посика */}
-
-      <ul>{/* Выводите список отфильтрованных пользователей здесь */}</ul>
+        <input type='text' onChange={(e) => setSearchTerm(e.target.value)} value={searchTerm}/>
+      <ul>{/* Выводите список отфильтрованных пользователей здесь */}
+        filteredUsers.map((user) => <li key={user.id}>{user.name}</li>)
+      </ul>
     </div>
   );
 };
