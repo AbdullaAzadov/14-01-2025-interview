@@ -1,24 +1,48 @@
-/* Задача 5
-Напишите контекст, и хук useScreenType, который будет возвращать текущий тип экрана. 
-Тип экрана должен быть строкой и принимать одно из следующих значений: 
-'mobile', 'tablet', 'desktop'.
-При этом, если контекст не был найден, хук должен бросать ошибку с текстом 'useScreen must be used within a ScreenProvider'. 
-Хук и контекст должны быть типизированы.
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
-mobile - если ширина экрана меньше 768px
-tablet - если ширина экрана меньше 1024px
-desktop - если ширина экрана больше 1024px
+type TScreenType = 'mobile' | 'tablet' | 'desktop';
 
+const getCurrentScreen = (): TScreenType => {
+  const width = window.innerWidth;
+  if (width < 768) return 'mobile';
+  if (width < 1024) return 'tablet';
+  return 'desktop';
+};
 
-Напишите объяснение к написанному коду.
-*/
+const ScreenContext = createContext<TScreenType | undefined>(undefined);
 
-// TScreenType
+interface ScreenContextProviderProps {
+  children: ReactNode;
+}
 
-// getCurrentScreen - функция, которая возвращает строку с типом экрана
+const ScreenContextProvider: React.FC<ScreenContextProviderProps> = ({ children }) => {
+  const [screenType, setScreenType] = useState<TScreenType>(getCurrentScreen);
 
-// ScreenContext
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenType(getCurrentScreen());
+    };
 
-// ScreenContextProvider
+    window.addEventListener('resize', handleResize);
 
-// useScreenType
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  return (
+    <ScreenContext.Provider value={screenType}>
+      {children}
+    </ScreenContext.Provider>
+  );
+};
+
+const useScreenType = (): TScreenType => {
+  const context = useContext(ScreenContext);
+  if (context === undefined) {
+    throw new Error('useScreen must be used within a ScreenProvider');
+  }
+  return context;
+};
+
+export { ScreenContextProvider, useScreenType };
