@@ -24,5 +24,5 @@ function Pow(number, power) {
   return 42;
 }
 
-Pow(2, 3); // должно вернуть 8
+Pow(2, 3); // должно вернуть 8 dsafdsafsadfasdfaas
 Pow(3, 2); // должно вернуть 9
