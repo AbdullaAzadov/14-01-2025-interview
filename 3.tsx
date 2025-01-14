@@ -1,15 +1,16 @@
-/* Задание 3
-Реализуйте компонент UserSearch, который позволяет искать пользователей по имени.
-Также необходимо типизировать объект User и компонент UserSearch.
-*/
 
+import { useState } from 'react';
+
+// Типизация объекта User
 interface IUser {
-  // Типизируйте объект User
+  id: number; // Уникальный идентификатор пользователя
+  name: string; // Имя пользователя
+  age: number; // Возраст пользователя
 }
 
 // Типизируйте компонент UserSearch
 const UserSearch = () => {
-  const users = [
+  const users: IUser[] = [
     { id: 1, name: 'Иван', age: 25 },
     { id: 2, name: 'Мария', age: 30 },
     { id: 3, name: 'Петр', age: 28 },
@@ -17,15 +18,39 @@ const UserSearch = () => {
     { id: 5, name: 'Анна', age: 22 },
   ];
 
-  const [searchTerm, setSearchTerm] = useState</*типизируйте useState*/>('');
-  const filteredUsers = []; // Фильтруйте пользователей по имени
+  const [searchTerm, setSearchTerm] = useState<string>(''); // Строка для введённого пользователем текста
+
+  // Фильтрация пользователей по имени
+  const filteredUsers = users.filter((user) =>
+    user.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Обработчик изменения ввода
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
 
   return (
-    <div>
-      <h1>Поиск пользователей</h1>
-      {/* Здесь напишите input для посика */}
-
-      <ul>{/* Выводите список отфильтрованных пользователей здесь */}</ul>
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Поиск пользователей</h1>
+      <input
+        type="text"
+        placeholder="Введите имя для поиска"
+        value={searchTerm}
+        onChange={handleInputChange}
+        className="border rounded px-4 py-2 mb-4 w-full"
+      />
+      <ul className="list-disc pl-6">
+        {filteredUsers.length > 0 ? (
+          filteredUsers.map((user) => (
+            <li key={user.id} className="mb-2">
+              {user.name}, {user.age} лет
+            </li>
+          ))
+        ) : (
+          <li className="text-gray-500">Нет пользователей, соответствующих запросу.</li>
+        )}
+      </ul>
     </div>
   );
 };
