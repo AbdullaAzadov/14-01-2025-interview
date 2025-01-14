@@ -1,12 +1,13 @@
-// Задание 2
-// Типизируйте данные и функцию в этом коде.
-
+// Типизация объекта задачи
 interface ITask {
-  // Типизируйте объект Task
+  id: number;         // Уникальный идентификатор задачи
+  title: string;      // Название задачи
+  completed: boolean; // Статус выполнения задачи
+  priority?: string;  // Приоритет задачи (опциональный)
 }
 
-// tasks - должен быть типизирован как массив объектов Task
-const tasks = [
+// tasks - массив объектов задачи (типизирован как массив ITask)
+const tasks: ITask[] = [
   { id: 1, title: 'Купить продукты', completed: true, priority: 'high' },
   { id: 2, title: 'Сделать домашнее задание', completed: false },
   { id: 3, title: 'Сходить в спортзал', completed: false },
@@ -19,10 +20,12 @@ const tasks = [
   { id: 10, title: 'Сходить на выставку', completed: true },
 ];
 
-// Напишите функцию, которая принимает массив задач и возвращает только выполненные задачи.
-function filterCompletedTasks() {
-  // Ваш код
+// Функция принимает массив задач и возвращает только выполненные задачи
+function filterCompletedTasks(tasks: ITask[]): ITask[] {
+  return tasks.filter((task) => task.completed);
 }
 
+// Выполненные задачи
 const completedTasks = filterCompletedTasks(tasks);
-console.log(completedTasks); // должно вернуть массив объектов с id: 1, 4, 6, 8, 10
+console.log(completedTasks); 
+// должно вернуть массив объектов с id: 1, 4, 6, 8, 10
