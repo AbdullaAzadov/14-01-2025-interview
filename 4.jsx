@@ -12,30 +12,29 @@ import { useState, useEffect } from 'react';
 
 const Component = () => {
   const [count, setCount] = useState(0);
-  const [isGreaterThan5, setIsGreaterThan5] = useState(false);
+  const increment = useCallback(() => setCount((prev) => prev + 1), []);
+  const decrement = useCallback(() => setCount((prev) => prev - 1), []);
+
 
   useEffect(() => {
     if (count > 5) {
-      setIsGreaterThan5(true);
-    } else {
-      setIsGreaterThan5(false);
-    }
-  }, [count]);
-
-  if (count > 5) {
-    useEffect(() => {
       const handleResize = () => {
         console.log('Resize event detected');
       };
+
       window.addEventListener('resize', handleResize);
-    }, []);
-  }
+
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }
+  }, [count]);
 
   return (
     <div>
       <p>Счетчик: {count}</p>
-      <button onClick={() => setCount(count + 1)}>Увеличить</button>
-      <button onClick={() => setCount(count - 1)}>Уменьшить</button>
+      <button onClick={increment}>Увеличить</button>
+      <button onClick={decrement}>Уменьшить</button>
       {isGreaterThan5 && <p>Счетчик больше 5</p>}
     </div>
   );
