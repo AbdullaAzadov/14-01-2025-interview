@@ -1,24 +1,49 @@
-/* Задача 5
-Напишите контекст, и хук useScreenType, который будет возвращать текущий тип экрана. 
-Тип экрана должен быть строкой и принимать одно из следующих значений: 
-'mobile', 'tablet', 'desktop'.
-При этом, если контекст не был найден, хук должен бросать ошибку с текстом 'useScreen must be used within a ScreenProvider'. 
-Хук и контекст должны быть типизированы.
+type TScreenType = 'mobile' | 'tablet' | 'desktop';
 
-mobile - если ширина экрана меньше 768px
-tablet - если ширина экрана меньше 1024px
-desktop - если ширина экрана больше 1024px
+// Функция для определения текущего типа экрана
+const getCurrentScreen = (): TScreenType => {
+  const width = window.innerWidth;
+  if (width < 768) return 'mobile';
+  if (width < 1024) return 'tablet';
+  return 'desktop';
+};
 
+// Создаем контекст
+const ScreenContext = createContext<TScreenType | undefined>(undefined);
 
-Напишите объяснение к написанному коду.
-*/
+// Провайдер контекста
+interface ScreenProviderProps {
+  children: ReactNode;
+}
 
-// TScreenType
+export const ScreenContextProvider: React.FC<ScreenProviderProps> = ({ children }) => {
+  const [screenType, setScreenType] = useState<TScreenType>(getCurrentScreen());
 
-// getCurrentScreen - функция, которая возвращает строку с типом экрана
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenType(getCurrentScreen());
+    };
 
-// ScreenContext
+    window.addEventListener('resize', handleResize);
 
-// ScreenContextProvider
+    // Очистка обработчика при размонтировании
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
-// useScreenType
+  return (
+    <ScreenContext.Provider value={screenType}>
+      {children}
+    </ScreenContext.Provider>
+  );
+};
+
+// Хук для использования контекста
+export const useScreenType = (): TScreenType => {
+  const context = useContext(ScreenContext);
+  if (context === undefined) {
+    throw new Error('useScreenType must be used within a ScreenProvider');
+  }
+  return context;
+};
