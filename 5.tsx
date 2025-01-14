@@ -24,12 +24,6 @@ desktop - если ширина экрана больше 1024px
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-// Типы экранов
-
-
-// Функция для получения типа экрана на основе ширины окна
-
-
 
 
 // TScreenType
