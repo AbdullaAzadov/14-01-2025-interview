@@ -1,27 +1,13 @@
-//  Задание 1
-//  Преобразуйте Pow в чистую функцию.
-//  Напишите что такое чистая функция и его определения.
-
-// Чистая функция - это ...
-
-let globalCounter = 0;
+// Чистая функция - это функция, результат выполнения которой зависит только от её входных аргументов и
+// не изменяет внешнее состояние (нет побочных эффектов).
 
 function Pow(number, power) {
-  globalCounter++;
-  const MathLibraryResult = Math.pow(number, power);
-
-  fetch('https://jsonplaceholder.typicode.com/posts')
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-    });
-
+  // Используем цикл для возведения в степень
   let res = 1;
   for (let i = 0; i < power; i++) {
     res *= number;
   }
-
-  return 42;
+  return res; // Возвращаем корректный результат
 }
 
 Pow(2, 3); // должно вернуть 8 dsafdsafsadfasdfaas
